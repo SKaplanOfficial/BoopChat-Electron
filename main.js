@@ -111,6 +111,8 @@ $(function() {
       .css('color', getTextColor(data.message))
       .css('background-color', getTextBg(data.message))
       .css('border', getBorderWidth(data.message)+'px solid '+getBorderColor(getTextBg(data.message)))
+      .css('background-image', getImage(data.message))
+      .css('height', getHeight(data.message))
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
@@ -132,7 +134,24 @@ $(function() {
         reply: true
       },
       function(error, response, metadata) {
-        console.log(response, metadata);
+        var message = metadata.activationValue
+        // Prevent markup from being injected into the message
+        message = cleanInput(message);
+        // if there is a non-empty message and a socket connection
+        if (message && connected) {
+          $inputMessage.val('');
+          addChatMessage({
+            username: username,
+            message: message,
+          });
+
+          // COMMANDS
+          if (message.includes("|test")){
+            socket.emit('new message', "Main.js line 150 is working!")
+          }
+          // tell server to execute 'new message' and send along one parameter
+          socket.emit('new message', message);
+        }
       }
       );
 
@@ -229,6 +248,23 @@ $(function() {
     // Calculate color
     var index = Math.abs(hash % COLORS.length);
     return COLORS[index];
+  }
+
+  // IMAGE background
+
+  const getHeight = (textSample) => {
+    if (textSample.includes("|img")){
+      return '300px';
+    }
+  }
+
+  const getImage = (textSample) => {
+    if (textSample.includes("|img")){
+      var link = textSample.substring(0,textSample.indexOf("|"));
+      return "url('"+link+"')";
+    }else{
+      return "none";
+    }
   }
 
   // TEXT background
@@ -336,6 +372,11 @@ $(function() {
   const removeCommandFormat = (textSample) => {
     if (textSample.includes("|")){
       var storage = textSample.substring(0,textSample.indexOf("|"));
+
+      if (textSample.includes("|img")){
+        storage = " ";
+      }
+
       return storage;
     }else{
       return textSample;
