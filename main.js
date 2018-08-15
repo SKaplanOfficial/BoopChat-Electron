@@ -34,7 +34,7 @@ $(function() {
   const notifier = require('node-notifier')
   const {remote} = require('electron')
   const {Menu, MenuItem} = remote
-  setMainMenu();
+  //setMainMenu();
 
   const addParticipantsMessage = (data) => {
     var message = '';
@@ -108,14 +108,14 @@ $(function() {
 
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
-      .css('border', '5px solid rgba('+getBorderColor(data.message)+',0.3)')
+      .css('border', '2px solid rgba('+getBorderColor(data.message)+',0.3)')
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
 
     addMessageElement($messageDiv, options);
 
-    
+
     if (data.message == "is typing" || data.username == username){
 
     }else{
@@ -123,7 +123,7 @@ $(function() {
         title: 'New BoopMessage',
         message: data.username + ": " + data.message
       });
-      
+
       // let myNotification = new Notification('New BoopMessage', {
       //     body: data.username + ": " + data.message
       // })
@@ -287,7 +287,7 @@ $(function() {
   socket.on('login', (data) => {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to BoopChat: Web Edition!";
+    var message = "Welcome to BoopChat!";
     log(message, {
       prepend: true
     });
@@ -396,7 +396,7 @@ $(function() {
         ]
       }
     ]
-    
+
     if (process.platform === 'darwin') {
       template.unshift({
         label: app.getName(),
@@ -412,7 +412,7 @@ $(function() {
           {role: 'quit'}
         ]
       })
-    
+
       // Edit menu
       template[1].submenu.push(
         {type: 'separator'},
@@ -424,7 +424,7 @@ $(function() {
           ]
         }
       )
-    
+
       // Window menu
       template[3].submenu = [
         {role: 'close'},
