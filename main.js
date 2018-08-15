@@ -108,9 +108,9 @@ $(function() {
 
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
-      .css('border', getBorderWidth(data.message)+'px solid rgba('+getBorderColor(data.message)+',0.3)')
       .css('color', getTextColor(data.message))
       .css('background-color', getTextBg(data.message))
+      .css('border', getBorderWidth(data.message)+'px solid '+getBorderColor(getTextBg(data.message)))
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
@@ -228,38 +228,38 @@ $(function() {
   // TEXT background
   const getTextBg = (textSample) => {
     if (textSample.includes("|BGRED")){
-      return 'rgb(255,0,0)';
+      return 'rgba(255,0,0,0.8)';
     }else if (textSample.includes("|BGPINK")){
-      return 'rgb(255,105,180)';
+      return 'rgba(255,105,180,0.8)';
     }else if (textSample.includes("|BGMAROON")){
-      return 'rgb(128,0,0)';
+      return 'rgba(128,0,0,0.8)';
     }else if (textSample.includes("|BGORANGE")){
-      return 'rgb(255,165,0)';
+      return 'rgba(255,165,0,0.8)';
     }else if (textSample.includes("|BGYELLOW")){
-      return 'rgb(255,255,0)';
+      return 'rgba(255,255,0,0.8)';
     }else if (textSample.includes("|BGGREEN")){
-      return 'rgb(0,255,0)';
+      return 'rgba(0,255,0,0.8)';
     }else if (textSample.includes("|BGLIGHTGREEN")){
-      return 'rgb(144,238,144)';
+      return 'rgba(144,238,144,0.8)';
     }else if (textSample.includes("|BGDARKGREEN")){
-      return 'rgb(0,100,0)';
+      return 'rgba(0,100,0,0.8)';
     }else if (textSample.includes("|BGBLUE")){
-      return 'rgb(0,0,255)';
+      return 'rgba(0,0,255,0.8)';
     }else if (textSample.includes("|BGLIGHTBLUE")){
-      return 'rgb(173,216,230)';
+      return 'rgba(173,216,255,0.8)';
     }else if (textSample.includes("|BGDARKBLUE")){
-      return 'rgb(0,0,139)';
+      return 'rgba(0,0,139,0.8)';
     }else if (textSample.includes("|BGPURPLE")){
-      return 'rgb(255,0,255)';
+      return 'rgba(255,0,255,0.8)';
     }else if (textSample.includes("|bgrgb")){
       var storage = textSample;
       var r = parseInt(textSample.substring(textSample.indexOf("(")+1, textSample.indexOf(",")));
       storage = textSample.substring(textSample.indexOf(",")+1);
       var g = parseInt(storage.substring(0, storage.indexOf(",")));
       var b = parseInt(storage.substring(storage.indexOf(",")+1, storage.indexOf(")")));
-      return 'rgb('+r+','+g+','+b+')';
+      return 'rgba('+r+','+g+','+b+',0.8)';
     }else{
-      return 'rgba(21,21,21,.5)';
+      return 'rgba(21,21,21,0.5)';
     }
   }
 
@@ -285,7 +285,7 @@ $(function() {
     }else if (textSample.includes("|BLUE")){
       return 'rgb(0,0,255)';
     }else if (textSample.includes("|LIGHTBLUE")){
-      return 'rgb(173,216,230)';
+      return 'rgb(173,216,255)';
     }else if (textSample.includes("|DARKBLUE")){
       return 'rgb(0,0,139)';
     }else if (textSample.includes("|PURPLE")){
@@ -318,15 +318,13 @@ $(function() {
     }
   }
 
-  const getBorderColor = (textsample) => {
-    // Compute hash code
-    var hash = 7;
-    for (var i = 0; i < textsample.length; i++) {
-       hash = textsample.charCodeAt(i) + (hash << 5) - hash;
-    }
-    // Calculate color
-    var index = Math.abs(hash % BORDERCOLORS.length);
-    return BORDERCOLORS[index];
+  const getBorderColor = (textSample) => {
+    var storage = textSample;
+    var r = parseInt(textSample.substring(textSample.indexOf("(")+1, textSample.indexOf(",")));
+    storage = textSample.substring(textSample.indexOf(",")+1);
+    var g = parseInt(storage.substring(0, storage.indexOf(",")));
+    var b = parseInt(storage.substring(storage.indexOf(",")+1, storage.indexOf(")")));
+    return 'rgba('+Math.round(r/3)+','+Math.round(g/3)+','+Math.round(b/3)+',0.3)';
   }
 
   const removeCommandFormat = (textSample) => {
