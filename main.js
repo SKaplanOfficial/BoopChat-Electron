@@ -31,6 +31,7 @@ $(function() {
   var $currentInput = $usernameInput.focus();
 
   var socket = io('http://ec2-34-228-74-65.compute-1.amazonaws.com:3000/');
+  const notifier = require('node-notifier')
   const {remote} = require('electron')
   const {Menu, MenuItem} = remote
   setMainMenu();
@@ -114,13 +115,18 @@ $(function() {
 
     addMessageElement($messageDiv, options);
 
-
+    
     if (data.message == "is typing" || data.username == username){
 
     }else{
-      let myNotification = new Notification('New BoopMessage', {
-          body: data.username + ": " + data.message
-      })
+      notifier.notify({
+        title: 'New BoopMessage',
+        message: data.username + ": " + data.message
+      });
+      
+      // let myNotification = new Notification('New BoopMessage', {
+      //     body: data.username + ": " + data.message
+      // })
     }
   }
 
