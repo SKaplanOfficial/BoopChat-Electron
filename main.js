@@ -130,6 +130,9 @@ $(function() {
         title: 'New BoopMessage',
         message: data.username + ": " + data.message,
         reply: true
+      },
+      function(error, response, metadata) {
+        console.log(response, metadata);
       }
       );
 
