@@ -32,6 +32,7 @@ $(function() {
 
   var socket = io('http://ec2-34-228-74-65.compute-1.amazonaws.com:3000/');
   const notifier = require('node-notifier')
+  const path = require('path');
   const {remote} = require('electron')
   const {Menu, MenuItem} = remote
   //setMainMenu();
@@ -129,6 +130,7 @@ $(function() {
         {
         title: 'New BoopMessage',
         message: data.username + ": " + data.message,
+        icon: path.join(__dirname, 'karp.png'),
         reply: true
       },
       function(error, response, metadata) {
