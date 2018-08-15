@@ -104,19 +104,24 @@ $(function() {
       .text(data.username)
       .css('color', getUsernameColor(data.username));
     var $messageBodyDiv = $('<span class="messageBody">')
-      .text(data.message);
+      .text(removeCommandFormat(data.message));
 
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
-      .css('border', '2px solid rgba('+getBorderColor(data.message)+',0.3)')
+      .css('border', getBorderWidth(data.message)+'px solid rgba('+getBorderColor(data.message)+',0.3)')
+      .css('color', getTextColor(data.message))
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
 
-    addMessageElement($messageDiv, options);
+    if (removeCommandFormat(data.message) == ""){
+
+    }else{
+      addMessageElement($messageDiv, options);
+    }
 
 
-    if (data.message == "is typing" || data.username == username){
+    if (data.message == "is typing" || data.username == username || document.hasFocus()){
 
     }else{
       notifier.notify({
@@ -219,6 +224,33 @@ $(function() {
     return COLORS[index];
   }
 
+  // TEXT background
+
+  // TEXT COLOR
+  const getTextColor = (textSample) => {
+    if (textSample.includes("|RED")){
+      return 'rgb(255,0,0)';
+    }else{
+      return 'rgb(255,255,255)';
+    }
+  }
+
+  // BORDERS
+  const getBorderWidth = (textSample) => {
+    if (textSample.includes("|weight")){
+      var storage = textSample.substring(textSample.indexOf("|weight"));
+      weight = parseInt(storage.substring(storage.indexOf("(")+1, storage.indexOf(")")));
+
+      if (weight > 0){
+        return weight;
+      }else{
+        return 2;
+      }
+    }else{
+      return 2;
+    }
+  }
+
   const getBorderColor = (textsample) => {
     // Compute hash code
     var hash = 7;
@@ -228,6 +260,15 @@ $(function() {
     // Calculate color
     var index = Math.abs(hash % BORDERCOLORS.length);
     return BORDERCOLORS[index];
+  }
+
+  const removeCommandFormat = (textSample) => {
+    if (textSample.includes("|")){
+      var storage = textSample.substring(0,textSample.indexOf("|"));
+      return storage;
+    }else{
+      return textSample;
+    }
   }
 
   //A function that makes numebrs like 1,27,843 into one, twenty-seven, eight hundred and forty-three
