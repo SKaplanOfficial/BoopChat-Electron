@@ -110,6 +110,7 @@ $(function() {
     var $messageDiv = $('<li class="message"/>')
       .css('border', getBorderWidth(data.message)+'px solid rgba('+getBorderColor(data.message)+',0.3)')
       .css('color', getTextColor(data.message))
+      .css('background-color', getTextBg(data.message))
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
@@ -225,11 +226,77 @@ $(function() {
   }
 
   // TEXT background
+  const getTextBg = (textSample) => {
+    if (textSample.includes("|BGRED")){
+      return 'rgb(255,0,0)';
+    }else if (textSample.includes("|BGPINK")){
+      return 'rgb(255,105,180)';
+    }else if (textSample.includes("|BGMAROON")){
+      return 'rgb(128,0,0)';
+    }else if (textSample.includes("|BGORANGE")){
+      return 'rgb(255,165,0)';
+    }else if (textSample.includes("|BGYELLOW")){
+      return 'rgb(255,255,0)';
+    }else if (textSample.includes("|BGGREEN")){
+      return 'rgb(0,255,0)';
+    }else if (textSample.includes("|BGLIGHTGREEN")){
+      return 'rgb(144,238,144)';
+    }else if (textSample.includes("|BGDARKGREEN")){
+      return 'rgb(0,100,0)';
+    }else if (textSample.includes("|BGBLUE")){
+      return 'rgb(0,0,255)';
+    }else if (textSample.includes("|BGLIGHTBLUE")){
+      return 'rgb(173,216,230)';
+    }else if (textSample.includes("|BGDARKBLUE")){
+      return 'rgb(0,0,139)';
+    }else if (textSample.includes("|BGPURPLE")){
+      return 'rgb(255,0,255)';
+    }else if (textSample.includes("|bgrgb")){
+      var storage = textSample;
+      var r = parseInt(textSample.substring(textSample.indexOf("(")+1, textSample.indexOf(",")));
+      storage = textSample.substring(textSample.indexOf(",")+1);
+      var g = parseInt(storage.substring(0, storage.indexOf(",")));
+      var b = parseInt(storage.substring(storage.indexOf(",")+1, storage.indexOf(")")));
+      return 'rgb('+r+','+g+','+b+')';
+    }else{
+      return 'rgb(21,21,21)';
+    }
+  }
+
 
   // TEXT COLOR
   const getTextColor = (textSample) => {
     if (textSample.includes("|RED")){
       return 'rgb(255,0,0)';
+    }else if (textSample.includes("|PINK")){
+      return 'rgb(255,105,180)';
+    }else if (textSample.includes("|MAROON")){
+      return 'rgb(128,0,0)';
+    }else if (textSample.includes("|ORANGE")){
+      return 'rgb(255,165,0)';
+    }else if (textSample.includes("|YELLOW")){
+      return 'rgb(255,255,0)';
+    }else if (textSample.includes("|GREEN")){
+      return 'rgb(0,255,0)';
+    }else if (textSample.includes("|LIGHTGREEN")){
+      return 'rgb(144,238,144)';
+    }else if (textSample.includes("|DARKGREEN")){
+      return 'rgb(0,100,0)';
+    }else if (textSample.includes("|BLUE")){
+      return 'rgb(0,0,255)';
+    }else if (textSample.includes("|LIGHTBLUE")){
+      return 'rgb(173,216,230)';
+    }else if (textSample.includes("|DARKBLUE")){
+      return 'rgb(0,0,139)';
+    }else if (textSample.includes("|PURPLE")){
+      return 'rgb(255,0,255)';
+    }else if (textSample.includes("|rgb")){
+      var storage = textSample;
+      var r = parseInt(textSample.substring(textSample.indexOf("(")+1, textSample.indexOf(",")));
+      storage = textSample.substring(textSample.indexOf(",")+1);
+      var g = parseInt(storage.substring(0, storage.indexOf(",")));
+      var b = parseInt(storage.substring(storage.indexOf(",")+1, storage.indexOf(")")));
+      return 'rgb('+r+','+g+','+b+')';
     }else{
       return 'rgb(255,255,255)';
     }
