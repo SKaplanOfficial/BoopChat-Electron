@@ -64,8 +64,8 @@ $(function() {
   }
 
   // Sends a chat message
-  const sendMessage = () => {
-    var message = $inputMessage.val();
+  const sendMessage = (textToSend) => {
+    var message = textToSend
     // Prevent markup from being injected into the message
     message = cleanInput(message);
     // if there is a non-empty message and a socket connection
@@ -130,39 +130,18 @@ $(function() {
     }else{
       notifier.notify(
         {
-        title: 'New BoopMessage',
-        message: data.username + ": " + data.message,
-        icon: path.join(__dirname, 'karp.png'),
-        reply: true
-      },
-      function(error, response, metadata) {
-        var message = metadata.activationValue
-        // Prevent markup from being injected into the message
-        message = cleanInput(message);
-        // if there is a non-empty message and a socket connection
-        if (message && connected) {
-          $inputMessage.val('');
-          addChatMessage({
-            username: username,
-            message: message,
-          });
-
-          // COMMANDS
-          if (message.includes("|test")){
-            socket.emit('new message', "Main.js line 150 is working!")
-          }
-          // tell server to execute 'new message' and send along one parameter
-          socket.emit('new message', message);
-        }
-      }
-      );
-
-      // let myNotification = new Notification('New BoopMessage', {
-      //     body: data.username + ": " + data.message
-      // })
+          title: 'New BoopMessage',
+          message: data.username + ": " + data.message,
+          icon: path.join(__dirname, 'karp.png'),
+          reply: true
+        },
+        function(error, response, metadata) {
+          sendMessage(metadata.activationValue)
+        });
     }
-  }
 
+  }
+  
   // Adds the visual chat typing message
   const addChatTyping = (data) => {
     data.typing = true;
@@ -411,7 +390,7 @@ $(function() {
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
       if (username) {
-        sendMessage();
+        sendMessage($inputMessage.val());
         socket.emit('stop typing');
         typing = false;
       } else {
@@ -492,104 +471,4 @@ $(function() {
     log('attempt to reconnect has failed');
   });
 
-  function setMainMenu() {
-    const template = [
-      {
-        label: 'Edit',
-        submenu: [
-          {role: 'undo'},
-          {role: 'redo'},
-          {type: 'separator'},
-          {role: 'cut'},
-          {role: 'copy'},
-          {role: 'paste'},
-          {role: 'pasteandmatchstyle'},
-          {role: 'delete'},
-          {role: 'selectall'}
-        ]
-      },
-      {
-        label: 'View',
-        submenu: [
-          {role: 'reload'},
-          {role: 'forcereload'},
-          {role: 'toggledevtools'},
-          {type: 'separator'},
-          {role: 'resetzoom'},
-          {role: 'zoomin'},
-          {role: 'zoomout'},
-          {type: 'separator'},
-          {role: 'togglefullscreen'}
-        ]
-      },
-      {
-        label: 'Actions',
-        submenu: [
-          {
-            label: 'Notify Users',
-            click() {
-              socket.emit('notify', username);
-              alert("Message Sent");
-            }
-          }
-        ]
-      },
-      {
-        role: 'window',
-        submenu: [
-          {role: 'minimize'},
-          {role: 'close'}
-        ]
-      },
-      {
-        role: 'help',
-        submenu: [
-          {
-            label: 'Learn More',
-            click () { require('electron').shell.openExternal('https://electronjs.org') }
-          }
-        ]
-      }
-    ]
-
-    if (process.platform === 'darwin') {
-      template.unshift({
-        label: app.getName(),
-        submenu: [
-          {role: 'about'},
-          {type: 'separator'},
-          {role: 'services', submenu: []},
-          {type: 'separator'},
-          {role: 'hide'},
-          {role: 'hideothers'},
-          {role: 'unhide'},
-          {type: 'separator'},
-          {role: 'quit'}
-        ]
-      })
-
-      // Edit menu
-      template[1].submenu.push(
-        {type: 'separator'},
-        {
-          label: 'Speech',
-          submenu: [
-            {role: 'startspeaking'},
-            {role: 'stopspeaking'}
-          ]
-        }
-      )
-
-      // Window menu
-      template[3].submenu = [
-        {role: 'close'},
-        {role: 'minimize'},
-        {role: 'zoom'},
-        {type: 'separator'},
-        {role: 'front'}
-      ]
-    }
-    const menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu)
-  }
 });
