@@ -77,7 +77,7 @@ $(function() {
 
       // COMMANDS
       if (message.includes("|test")){
-        socket.emit('new message', "Main.js line 72 is working!")
+        socket.emit('new message', "Main.js line 80 is working!")
       }
       // tell server to execute 'new message' and send along one parameter
       socket.emit('new message', message);
@@ -259,7 +259,7 @@ $(function() {
       var b = parseInt(storage.substring(storage.indexOf(",")+1, storage.indexOf(")")));
       return 'rgb('+r+','+g+','+b+')';
     }else{
-      return 'rgb(21,21,21)';
+      return 'rgba(21,21,21,.5)';
     }
   }
 
@@ -314,7 +314,7 @@ $(function() {
         return 2;
       }
     }else{
-      return 2;
+      return 0;
     }
   }
 
