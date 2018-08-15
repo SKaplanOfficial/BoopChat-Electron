@@ -32,6 +32,8 @@ $(function() {
   var lastTypingTime;
   var $currentInput = $usernameInput.focus();
 
+
+  // Locate server
   var socket = io('http://ec2-34-228-74-65.compute-1.amazonaws.com:3000/');
 
   const addParticipantsMessage = (data) => {
@@ -64,7 +66,7 @@ $(function() {
   const sendMessage = () => {
     var message = $inputMessage.val();
     // Prevent markup from being injected into the message
-    message = cleanInput(message);
+    //message = cleanInput(message);
     // if there is a non-empty message and a socket connection
     if (message && connected) {
       $inputMessage.val('');
@@ -75,7 +77,21 @@ $(function() {
 
       // COMMANDS
       if (message.includes("|test")){
-        socket.emit('new message', "Main.js line 72 is working!")
+        socket.emit('new message', "Main.js line 80 is working!");
+        addChatMessage({
+          username: "Tester",
+          message: "Main.js line 80 is working!",
+        });
+      }
+
+      if (message.includes("|spam")){
+        for (var i=0; i<1000; i++){
+          socket.emit('new message', "Main.js line 88 is working!");
+        }
+        addChatMessage({
+          username: "Spammer",
+          message: "Spamming in progress.",
+        });
       }
       // tell server to execute 'new message' and send along one parameter
       socket.emit('new message', message);
@@ -106,7 +122,7 @@ $(function() {
 
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
-      .css('border', '5px solid rgba('+getBorderColor(data.message)+',0.3)')
+      .css('border', '2px solid rgba('+getBorderColor(data.message)+',0.3)')
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
