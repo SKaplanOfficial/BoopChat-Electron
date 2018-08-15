@@ -1,6 +1,5 @@
 //BoopChat Web - Frontend JavaScript
 
-
 $(function() {
   var FADE_TIME = 150; // ms
   var TYPING_TIMER_LENGTH = 400; // ms
@@ -32,9 +31,10 @@ $(function() {
   var lastTypingTime;
   var $currentInput = $usernameInput.focus();
 
-
-  // Locate server
   var socket = io('http://ec2-34-228-74-65.compute-1.amazonaws.com:3000/');
+  const {remote} = require('electron')
+  const {Menu, MenuItem} = remote
+  setMainMenu();
 
   const addParticipantsMessage = (data) => {
     var message = '';
@@ -66,7 +66,7 @@ $(function() {
   const sendMessage = () => {
     var message = $inputMessage.val();
     // Prevent markup from being injected into the message
-    //message = cleanInput(message);
+    message = cleanInput(message);
     // if there is a non-empty message and a socket connection
     if (message && connected) {
       $inputMessage.val('');
@@ -77,21 +77,7 @@ $(function() {
 
       // COMMANDS
       if (message.includes("|test")){
-        socket.emit('new message', "Main.js line 80 is working!");
-        addChatMessage({
-          username: "Tester",
-          message: "Main.js line 80 is working!",
-        });
-      }
-
-      if (message.includes("|spam")){
-        for (var i=0; i<1000; i++){
-          socket.emit('new message', "Main.js line 88 is working!");
-        }
-        addChatMessage({
-          username: "Spammer",
-          message: "Spamming in progress.",
-        });
+        socket.emit('new message', "Main.js line 72 is working!")
       }
       // tell server to execute 'new message' and send along one parameter
       socket.emit('new message', message);
@@ -122,7 +108,7 @@ $(function() {
 
     var typingClass = data.typing ? 'typing' : '';
     var $messageDiv = $('<li class="message"/>')
-      .css('border', '2px solid rgba('+getBorderColor(data.message)+',0.3)')
+      .css('border', '5px solid rgba('+getBorderColor(data.message)+',0.3)')
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
@@ -290,11 +276,6 @@ $(function() {
     $inputMessage.focus();
   });
 
-  $alertButton.click(() => {
-      socket.emit('notify', username);
-      alert("Message Sent");
-  });
-
   // Socket events
 
   // Whenever the server emits 'login', log the login message
@@ -351,4 +332,104 @@ $(function() {
     log('attempt to reconnect has failed');
   });
 
+  function setMainMenu() {
+    const template = [
+      {
+        label: 'Edit',
+        submenu: [
+          {role: 'undo'},
+          {role: 'redo'},
+          {type: 'separator'},
+          {role: 'cut'},
+          {role: 'copy'},
+          {role: 'paste'},
+          {role: 'pasteandmatchstyle'},
+          {role: 'delete'},
+          {role: 'selectall'}
+        ]
+      },
+      {
+        label: 'View',
+        submenu: [
+          {role: 'reload'},
+          {role: 'forcereload'},
+          {role: 'toggledevtools'},
+          {type: 'separator'},
+          {role: 'resetzoom'},
+          {role: 'zoomin'},
+          {role: 'zoomout'},
+          {type: 'separator'},
+          {role: 'togglefullscreen'}
+        ]
+      },
+      {
+        label: 'Actions',
+        submenu: [
+          {
+            label: 'Notify Users',
+            click() {
+              socket.emit('notify', username);
+              alert("Message Sent");
+            }
+          }
+        ]
+      },
+      {
+        role: 'window',
+        submenu: [
+          {role: 'minimize'},
+          {role: 'close'}
+        ]
+      },
+      {
+        role: 'help',
+        submenu: [
+          {
+            label: 'Learn More',
+            click () { require('electron').shell.openExternal('https://electronjs.org') }
+          }
+        ]
+      }
+    ]
+    
+    if (process.platform === 'darwin') {
+      template.unshift({
+        label: app.getName(),
+        submenu: [
+          {role: 'about'},
+          {type: 'separator'},
+          {role: 'services', submenu: []},
+          {type: 'separator'},
+          {role: 'hide'},
+          {role: 'hideothers'},
+          {role: 'unhide'},
+          {type: 'separator'},
+          {role: 'quit'}
+        ]
+      })
+    
+      // Edit menu
+      template[1].submenu.push(
+        {type: 'separator'},
+        {
+          label: 'Speech',
+          submenu: [
+            {role: 'startspeaking'},
+            {role: 'stopspeaking'}
+          ]
+        }
+      )
+    
+      // Window menu
+      template[3].submenu = [
+        {role: 'close'},
+        {role: 'minimize'},
+        {role: 'zoom'},
+        {type: 'separator'},
+        {role: 'front'}
+      ]
+    }
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
+  }
 });
