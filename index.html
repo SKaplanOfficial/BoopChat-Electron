@@ -1,0 +1,36 @@
+<!-- BoopChat Web Frontend Base HTML -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BoopChat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="particles-js">
+    <ul class="pages">
+      <li class="chat page">
+        <div class="chatArea">
+          <button class="alertButton">Notify Users</button>
+          <ul class="messages"></ul>
+        </div>
+        <input class="inputMessage" spellcheck="true" placeholder="Type here..."/>
+      </li>
+      <li class="login page">
+        <div class="form">
+          <h3 class="title">What's your nickname?</h3>
+          <input class="usernameInput" type="text" maxlength="15" placeholder="John Smith..."/>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+  <script src="particles/particles.js"></script>
+  <script src="particles/app.js"></script>
+  <script src="jquery.js"></script>
+  <script src="socketio.js"></script>
+  <script src="main.js"></script>
+  <script>if (window.module) module = window.module;</script>
+</body>
+</html>

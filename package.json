@@ -1,0 +1,14 @@
+{
+  "name": "boopchat-electron",
+  "version": "1.0.0",
+  "description": "boopchat for the web -- now for desktop",
+  "main": "run.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "The Boop Team (TM)",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^2.0.7"
+  }
+}
