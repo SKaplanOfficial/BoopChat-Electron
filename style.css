@@ -140,6 +140,8 @@ ul {
   background-color: rgba(25,25,25, 0.5);
   padding: 2px 5px 2px 5px;
   margin-bottom: 3px;
+  background-repeat: no-repeat;
+  background-position: center; 
 }
 
 .message.typing .messageBody {

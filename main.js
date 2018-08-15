@@ -141,7 +141,7 @@ $(function() {
     }
 
   }
-  
+
   // Adds the visual chat typing message
   const addChatTyping = (data) => {
     data.typing = true;
@@ -232,7 +232,6 @@ $(function() {
   }
 
   // IMAGE background
-
   const getHeight = (textSample) => {
     if (textSample.includes("|img")){
       return '300px';
@@ -337,7 +336,11 @@ $(function() {
         return 2;
       }
     }else{
-      return 0;
+      if (textSample.includes("|img")){
+        return 10;
+      }else{
+        return 0;
+      }
     }
   }
 
