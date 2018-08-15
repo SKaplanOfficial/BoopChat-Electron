@@ -125,10 +125,13 @@ $(function() {
     if (data.message == "is typing" || data.username == username || document.hasFocus()){
 
     }else{
-      notifier.notify({
+      notifier.notify(
+        {
         title: 'New BoopMessage',
-        message: data.username + ": " + data.message
-      });
+        message: data.username + ": " + data.message,
+        reply: true
+      }
+      );
 
       // let myNotification = new Notification('New BoopMessage', {
       //     body: data.username + ": " + data.message
