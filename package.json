@@ -9,7 +9,7 @@
   "author": "The Boop Team (TM)",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^2.0.7"
+    "electron": "^2.0.8"
   },
   "dependencies": {
     "electron-windows-notifications": "^2.1.1",
